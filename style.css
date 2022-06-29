@@ -1,0 +1,327 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.header {
+  position: fixed;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  font-size: medium;
+  border-bottom: 0.1em solid rgb(245, 242, 242);
+  text-align: center;
+}
+
+.header span {
+  width: 25vw;
+}
+.header span img {
+  margin: auto;
+  width: 15%;
+}
+
+.contact {
+  width: 25vw;
+  height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: silver;
+  font-weight: bold;
+}
+
+.contact p {
+  padding: 5px;
+  color: grey;
+  font-weight: normal;
+}
+
+.mainbody {
+  padding-top: 10vh;
+  width: 100%;
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20vw;
+  height: 100vh;
+  background-color: rgb(48, 47, 47);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.systemname {
+  font-size: x-large;
+  color: white;
+  padding: 5vh;
+  text-align: center;
+  font-weight: 600;
+}
+
+.menu {
+  font-size: large;
+  color: white;
+  list-style: none;
+}
+
+li {
+  text-align: left;
+  padding: 1.5vw;
+  border-radius: 12px;
+  margin: 1vh;
+  cursor: pointer;
+}
+li:hover,
+.active {
+  background-color: deepskyblue;
+}
+
+hr {
+  width: 80%;
+  margin: auto;
+}
+
+.body {
+  margin-left: 20vw;
+  background-color: white;
+}
+
+.dashboard {
+  padding: 20px;
+  font-size: x-large;
+  font-weight: 700;
+}
+
+.h_status {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.doctor,
+.nurse,
+.room {
+  width: 20vw;
+  height: 60px;
+  padding: 10px;
+  flex-wrap: wrap;
+  background-color: rgb(48, 47, 47);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  font-size: x-large;
+}
+
+.name {
+  font-size: medium;
+}
+
+.count {
+  color: tomato;
+  font-size: xx-large;
+}
+
+.detailstatus {
+  margin: 5vh 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.status {
+  min-width: 35vw;
+  min-height: 30vh;
+}
+
+.table {
+  width: 100%;
+  text-align: left;
+  font-size: small;
+}
+
+tr {
+  line-height: 3.5vh;
+}
+
+td {
+  color: rgb(116, 114, 114);
+  border-bottom: 1px solid silver;
+}
+
+.title {
+  text-align: left;
+  font-size: medium;
+  padding: 1.5vh;
+}
+
+.colorprimary {
+  color: white;
+}
+
+.colorsecondary {
+  color: tomato;
+}
+
+.bgsecondary {
+  background-color: tomato;
+}
+
+.bgthird {
+  background-color: silver;
+}
+
+.bgfouth {
+  background-color: teal;
+}
+
+.bgfive {
+  background-color: rgb(48, 47, 47);
+}
+
+.price {
+  font-weight: 700;
+  font-size: medium;
+  color: black;
+}
+
+.btn {
+  margin: 12px;
+  width: 100px;
+  height: 30px;
+  float: right;
+  border-radius: 2px;
+  cursor: pointer;
+  border-style: none;
+}
+
+.btnroom {
+  background-color: tomato;
+  color: white;
+}
+
+.btndrug {
+  background-color: teal;
+  color: white;
+}
+
+.btnappointment {
+  background-color: rgb(48, 47, 47);
+  color: white;
+}
+
+.btnmessage {
+  border: 1px solid grey;
+  background-color: white;
+}
+
+@media screen and (max-width: 720px) {
+  .nav {
+    display: none;
+  }
+
+  .body {
+    margin-left: 0;
+  }
+}
+
+/*Room View Status*/
+
+.rooms {
+  padding: 50px;
+  display: flex;
+  flex-flow: wrap;
+}
+
+.d_room {
+  margin: auto;
+}
+
+.r_status {
+  margin: 15px;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+}
+
+.activeRoom {
+  background-color: tomato;
+}
+
+.lock {
+  background-color: grey;
+}
+
+.avaliable {
+  background-color: teal;
+}
+
+.roomname {
+  padding: 12px;
+  text-align: center;
+}
+
+hr {
+  width: 100%;
+  border-width: 0;
+}
+
+.block {
+  padding: 10px;
+  margin-left: 20px;
+}
+
+/*Doctor List*/
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  margin: 10px;
+  width: 320px;
+  height: 140px;
+  background-color: teal;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.img {
+  width: 30%;
+}
+
+img {
+  width: 100%;
+}
+
+.detail {
+  line-height: 40px;
+}
+
+.text {
+  font-size: large;
+  color: white;
+}
+
+.value {
+  font-size: large;
+  color: white;
+}
