@@ -42,6 +42,7 @@
       $sql->bindValue(':messageDes', $_POST['msgDes']);
       $sql->execute();
       $msgArr = refresh($pdo, 'messages');
+
     } else if(isset($_POST['addDrugs'])){
       $insertMessage = "INSERT INTO drugstore(item,amount,itemNum, price) VALUE(:item, :amount, :itemNum, :price)";
       $sql = $pdo->prepare($insertMessage);
@@ -51,6 +52,7 @@
       $sql->bindValue(':price', $_POST['itemPrice']);
       $sql->execute();
       $drugArr = refresh($pdo, 'drugstore');
+
     } else if(isset($_POST['addApps'])){
       $insertMessage = "INSERT INTO appointments(title,roomNum,details) VALUE(:title, :room, :details)";
       $sql = $pdo->prepare($insertMessage);
@@ -59,11 +61,9 @@
       $sql->bindValue(':details', $_POST['appDetails']);
       $sql->execute();
       $appArr = refresh($pdo, 'appointments');
+
     } else if (isset($_POST)){
-      if (empty($_POST)) {
-        return;
-      }
-      else if (gettype($_POST) === 'string'){
+      if (count($_POST) === 1){
         $str = key($_POST);
         $cmd = ltrim($str, $str[0]);
         $code = ltrim($cmd, $cmd[0]);
@@ -73,18 +73,18 @@
           case ('D'): removeItem($pdo, $code, 'drugstore'); break;
           case ('A'): removeItem($pdo, $code, 'appointments'); break;
         }
-      } else if (gettype($_POST) === 'array'){
+      } else if (count($_POST) > 1){
         $str = array_search('Update', $_POST);
-        echo $str;
+        // echo $str;
         $cmd = ltrim($str, $str[0]);
         $code = ltrim($cmd, $cmd[0]);
-        echo "<br> $cmd[0] <br>";
-        echo $code;
+        // echo "<br> $cmd[0] <br>";
+        // echo $code;
         switch($cmd[0]){
-          case ('R'): updateItem($pdo, $code, 'rooms'); break;
-          case ('M'): updateItem($pdo, $code, 'messages'); break;
-          case ('D'): updateItem($pdo, $code, 'drugstore'); break;
-          case ('A'): updateItem($pdo, $code, 'appointments'); break;
+          case ('R'): updateRooms($pdo, $code); break;
+          case ('M'): updateMsgs($pdo, $code); break;
+          case ('D'): updateDrugs($pdo, $code); break;
+          case ('A'): updateApps($pdo, $code);
         }
       }
       }
@@ -93,18 +93,45 @@
       $query = "DELETE FROM $table WHERE id = $code";
       $sql = $pdo->prepare($query);
       $sql->execute();
+      header('location:index.php');
     }
 
-    function updateItem ($pdo, $code, $table) {
-      $query = "UPDATE $table SET roomStatus=:roomStatus, beds=:beds, price=:price WHERE id = $code";
+    function updateRooms ($pdo, $code) {
+      $query = "UPDATE rooms SET roomStatus=:roomStatus, beds=:beds, price=:price WHERE id = $code";
       $sql=$pdo->prepare($query);
-      echo $_POST['roomStatus'];
-      echo $_POST['beds'];
-      echo $_POST['price'];
       $sql->bindValue(":roomStatus", $_POST['roomStatus']);
       $sql->bindValue(":beds", $_POST['beds']);
       $sql->bindValue(":price", $_POST['price']);
       $sql->execute();
+      header('location:index.php');
+    }
+    function updateMsgs ($pdo, $code) {
+      $query = "UPDATE messages SET author=:author, title=:title, messageDes=:msgDes WHERE id = $code";
+      $sql=$pdo->prepare($query);
+      $sql->bindValue(":author", $_POST['author']);
+      $sql->bindValue(":title", $_POST['title']);
+      $sql->bindValue(":msgDes", $_POST['msgDes']);
+      $sql->execute();
+      header('location:index.php');
+    }
+    function updateDrugs ($pdo, $code) {
+      $query = "UPDATE drugstore SET item=:item, amount=:amount, itemNum=:itemNum, price=:price WHERE id = $code";
+      $sql=$pdo->prepare($query);
+      $sql->bindValue(":item", $_POST['item']);
+      $sql->bindValue(":amount", $_POST['amount']);
+      $sql->bindValue(":itemNum", $_POST['itemNum']);
+      $sql->bindValue(":price", $_POST['price']);
+      $sql->execute();
+      header('location:index.php');
+    }
+    function updateApps ($pdo, $code) {
+      $query = "UPDATE appointments SET title=:title, roomNum=:roomNum, details=:details WHERE id = $code";
+      $sql=$pdo->prepare($query);
+      $sql->bindValue(":title", $_POST['title']);
+      $sql->bindValue(":roomNum", $_POST['roomNum']);
+      $sql->bindValue(":details", $_POST['details']);
+      $sql->execute();
+      header('location:index.php');
     }
 ?>
 
@@ -138,7 +165,7 @@
           <p id="phone"><ion-icon name="call"></ion-icon> </p></span>
       </div>
       <div class="mainbody">
-        <div class="nav" style="display:none">
+        <div class="nav">
           <div class="systemname">Sakura Hospital</div>
           <ul class="menu">
             <li class="active"><ion-icon name="apps"></ion-icon> Dashboard</li>
@@ -177,26 +204,31 @@
               </div>
               <table class="table" id="room">
                 <?php 
+                $num = 0;
                   foreach($roomsArr as $room){
                       $idRoomD = "dR".$room['id'];
                       $idRoomU = "uR".$room['id'];
                       $statusRoom = $room['roomStatus'];
                       $bedRoom = $room['beds'];
                       $priceRoom = $room['Price'];
+                      $checkBoxNum = 'cbr' . ($num++);
                       echo "<tr>";
                       echo "<td> Room " . $room['id'] . "</td>";
                       echo "<td>" . $statusRoom . "</td>";
                       echo "<td>" . $bedRoom . "</td>";
                       echo "<td>" . $priceRoom . "</td>";
                       echo "<td><form action='index.php' method='POST' class='deleteForm'>";
-                      echo "<input type='submit' value='Delete' name=$idRoomD>";
+                      echo "<input type='submit' value='Delete' class='updateBtns' name=$idRoomD>";
                       echo "</form>";
 
+                      echo "<label for=$checkBoxNum class='updateBtns'>Edit</label>";
+                      echo "<input type='checkbox' class='updater' id=$checkBoxNum>";
+
                       echo "<form action='index.php' method='POST' class='updaterForm'>";
-                      echo "<input type='submit' value='Update' name=$idRoomU>";
                       echo "<input type='text' name='roomStatus' value=$statusRoom>";
                       echo "<input type='text' name='beds' value=$bedRoom>";
                       echo "<input type='text' name='price' value=$priceRoom>";
+                      echo "<input type='submit' value='Update' name=$idRoomU>";
                       echo "</td></form>";
                       echo "</div>";
                       echo "</tr>";
@@ -225,15 +257,37 @@
               </div>
               <table class="table" id="message">
               <?php 
+                $num = 0;
                   foreach($msgArr as $msg){
+                      $idMsgD = "dM".$msg['id'];
+                      $idMsgU = "uM".$msg['id'];
+                      $author = $msg['author'];
+                      $title = $msg['title'];
+                      $msgDes = $msg['messageDes'];
+                      $checkBoxNum = 'cbm' . ($num++);
                       echo "<tr>";
-                      echo   "<td> Room " . $msg['id'] . "</td>";
-                      echo   "<td>" . $msg['author'] . "</td>";
-                      echo   "<td>" . $msg['title'] . "</td>";
-                      echo   "<td>" . $msg['messageDes'] . "</td>";
+                      echo   "<td>" . $msg['id'] . "</td>";
+                      echo   "<td>" . $author . "</td>";
+                      echo   "<td>" . $title . "</td>";
+                      echo   "<td>" . $msgDes . "</td>";
+                      echo  "<td><form action='index.php' method='POST' class='deleteForm'>";
+                      echo  "<input type='submit' value='Delete' class='updateBtns' name=$idMsgD>";
+                      echo "</form>";
+
+                      echo "<label for=$checkBoxNum class='updateBtns'>Edit</label>";
+                      echo "<input type='checkbox' class='updater' id=$checkBoxNum>";
+
+                      echo "<form action='index.php' method='POST' class='updaterForm'>";
+                      echo "<input type='text' name='author' value=$author>";
+                      echo "<input type='text' name='title' value=$title>";
+                      echo "<input type='text' name='msgDes' value=$msgDes>";
+                      echo "<input type='submit' value='Update' name=$idMsgU>";
+                      echo "</td></form>";
+                      echo "</div>";
                       echo "</tr>";
                   } 
                 ?>
+
               </table>
               <form action="./viewAll.php"method="POST"> 
                 <input class="btn btnmessage" type="submit" value="Read More" name="messages"/>
@@ -258,12 +312,36 @@
               </div>
               <table class="table">
                 <?php 
+                $num = 0;
                   foreach($drugArr as $drug){
+                      $idMsgD = "dD".$drug['id'];
+                      $idMsgU = "uD".$drug['id'];
+                      $item = $drug['item'];
+                      $amount = $drug['amount'];
+                      $itemNum = $drug['itemNum'];
+                      $price = $drug['price'];
+                      $checkBoxNum = 'cbd' . ($num++);
                       echo "<tr>";
-                      echo   "<td>" . $drug['item'] . "</td>";
-                      echo   "<td>" . $drug['amount'] . "</td>";
-                      echo   "<td>" . $drug['itemNum'] . "</td>";
-                      echo   "<td class='price'>" . $drug['price'] . "</td>";
+                      // echo   "<td>" . $drug['id'] . "</td>";
+                      echo   "<td>" . $item . "</td>";
+                      echo   "<td>" . $amount . "</td>";
+                      echo   "<td>" . $itemNum . "</td>";
+                      echo   "<td class='price'>" . $price . "</td>";
+                      echo  "<td><form action='index.php' method='POST' class='deleteForm'>";
+                      echo  "<input type='submit' value='Delete' class='updateBtns' name=$idMsgD>";
+                      echo "</form>";
+
+                      echo "<label for=$checkBoxNum class='updateBtns'>Edit</label>";
+                      echo "<input type='checkbox' class='updater' id=$checkBoxNum>";
+
+                      echo "<form action='index.php' method='POST' class='updaterForm'>";
+                      echo "<input type='text' name='item' value=$item>";
+                      echo "<input type='text' name='amount' value=$amount>";
+                      echo "<input type='text' name='itemNum' value=$itemNum>";
+                      echo "<input type='text' name='price' value=$price>";
+                      echo "<input type='submit' value='Update' name=$idMsgU>";
+                      echo "</td></form>";
+                      echo "</div>";
                       echo "</tr>";
                   } 
                 ?>
@@ -290,30 +368,36 @@
               <ion-icon name="calendar"></ion-icon><span id="appointmentTitle"> Appointment </span>
               </div>
               <table class="table">
-              <?php 
+                <?php 
+                $num = 0;
                   foreach($appArr as $app){
+                      $idMsgD = "dA".$app['id'];
+                      $idMsgU = "uA".$app['id'];
+                      $title = $app['title'];
+                      $roomNum = $app['roomNum'];
+                      $details = $app['details'];
+                      $checkBoxNum = 'cba' . ($num++);
                       echo "<tr>";
-                      echo   "<td>" . $app['title'] . "</td>";
-                      echo   "<td>" . $app['roomNum'] . "</td>";
-                      echo   "<td class='price'>" . $app['details'] . "</td>";
+                      echo   "<td>" . $title . "</td>";
+                      echo   "<td>" . $roomNum . "</td>";
+                      echo   "<td>" . $details . "</td>";
+                      echo  "<td><form action='index.php' method='POST' class='deleteForm'>";
+                      echo  "<input type='submit' value='Delete' class='updateBtns' name=$idMsgD>";
+                      echo "</form>";
+
+                      echo "<label for=$checkBoxNum class='updateBtns'>Edit</label>";
+                      echo "<input type='checkbox' class='updater' id=$checkBoxNum>";
+
+                      echo "<form action='index.php' method='POST' class='updaterForm'>";
+                      echo "<input type='text' name='title' value=$title>";
+                      echo "<input type='text' name='roomNum' value=$roomNum>";
+                      echo "<input type='text' name='details' value=$details>";
+                      echo "<input type='submit' value='Update' name=$idMsgU>";
+                      echo "</td></form>";
+                      echo "</div>";
                       echo "</tr>";
                   } 
                 ?>
-                <tr>
-                  <td>Meet Dr.Yamada Uke  (Skin).</td>
-                  <td>Room 102</td>
-                  <td class="price">2020/12/03 09:00 AM</td>
-                </tr>
-                <tr>
-                <td>Meet Dr.Yamazaki Shizue  (lung).</td>
-                  <td>Room 202</td>
-                  <td class="price">2021/01/12 07:00 PM</td>
-                </tr>
-                <tr>
-                  <td>Meet Dr.Kanagawa Aki  (Heart).</td>
-                  <td>Room 401</td>
-                  <td class="price">2021/02/21 11:00 AM</td>
-                </tr>
               </table>
               <form action="./viewAll.php"method="POST"> 
                 <input class="btn btndrug btnappointment" type="submit" value="See All" name="appointments"/>
@@ -321,12 +405,12 @@
               <label for="addApp" class="btn btnappointment">Add Appointment</label>
               <input type="checkbox" name="addApp" id="addApp">
               <form class='adderForm' action="index.php" method="POST" id="appAdder">
-                <input type="text" name="appTitle"/>
                 <label for="status">Title</label>
-                <input type="text" name="appRoom"/>
+                <input type="text" name="appTitle"/>
                 <label for="beds">Room No.</label>
-                <input type="text" name="appDetails"/>
+                <input type="text" name="appRoom"/>
                 <label for="price">Details</label>
+                <input type="text" name="appDetails"/>
                 <input type="submit" value="Add" name="addApps">
               </form>
             </div>

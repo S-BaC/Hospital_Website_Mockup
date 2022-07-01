@@ -112,13 +112,13 @@ function refreshList ($pdo) {
 
           <label for="addDoctor" class="btn btnmessage">Add Doctor</label>
           <input type="checkbox" name="addDoctor" id="addDoctor">
-          <form action="doctorlist.php" enctype="multipart/form-data" method="POST" id="docAdder">
-            <input type="text" name="docName"/>
+          <form action="doctorlist.php" enctype="multipart/form-data" method="POST" class='adderForm' id="docAdder">
             <label for="docName">Name</label>
-            <input type="text" name="docTitle"/>
+            <input type="text" name="docName"/>
             <label for="docTitle">Title</label>
-            <input type="file" name="docPhoto"/>
+            <input type="text" name="docTitle"/>
             <label for="docPhoto">Photo</label>
+            <input type="file" name="docPhoto"/>
             <input type="submit" value="Add" name="addDoctors">
           </form>
 

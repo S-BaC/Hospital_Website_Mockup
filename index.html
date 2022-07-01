@@ -31,7 +31,7 @@
           <div class="systemname">Sakura Hospital</div>
           <ul class="menu">
             <li class="active"><ion-icon name="apps"></ion-icon> Dashboard</li>
-          <a href="./doctorlist.html">    <li><ion-icon name="git-network"></ion-icon> Doctor List</li></a>
+          <a href="./doctorlist.php">    <li><ion-icon name="git-network"></ion-icon> Doctor List</li></a>
           </ul>
           <hr>
           <ul class="menu">
@@ -60,16 +60,24 @@
           <div class="detailstatus">
             <div class="status">
               <div class="title colorprimary bgsecondary">
+                <p>Room</p>
                 <ion-icon name="bed-outline"></ion-icon><span id="roomTitle"> </span>
               </div>
               <table class="table" id="room">
                 
               </table>
               <a href="./roomView.html"> <button class="btn btnroom">SEE ALL</button></a>
-              <button class="btn btnroom">Add Room</button>
+              <label for="addRoom" class="btn btnroom">Add Room</label>
+              <input type="checkbox" name="addRoom">
+              <form action="index.php" method="POST" id="roomAdder">
+                <input type="text" name="status"/>
+                <input type="text" name="beds"/>
+                <input type="text" name="price"/>
+              </form>
             </div>
             <div class="status">
               <div class="title bgthird">
+                <p>Messages</p>
                 <ion-icon name="mail-unread-outline"></ion-icon><span id="messageTitle"> </span>
               </div>
               <table class="table" id="message">
