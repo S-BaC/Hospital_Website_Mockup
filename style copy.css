@@ -327,3 +327,54 @@ img {
   font-size: large;
   color: white;
 }
+
+
+
+
+
+#addRoom, #addMessage, #addDrug, #addApp, #addDoctor {
+  visibility: hidden;
+}
+
+#roomAdder, #msgAdder, #drugAdder, #appAdder, #docAdder{
+  display: none;
+}
+
+#addRoom:checked + #roomAdder, 
+#addMessage:checked + #msgAdder, 
+#addDrug:checked + #drugAdder, 
+#addApp:checked + #appAdder,
+#addDoctor:checked + #docAdder
+{
+  display: block;
+}
+
+.updateItem:checked {
+  transform: scale(10);
+}
+
+.adderForm {
+  padding:2vmin;
+  margin:5vh;
+  box-shadow: 0 0 5px #555;
+}
+
+.adderForm label {
+  display: block;
+  margin: 1vmin 0;
+}
+
+.adderForm :last-child{
+  padding:0.5vmin; 
+  background-color: #333;
+  color:#eee;
+  display:block;
+  margin-top:1vmin;
+  width:5vw;
+}
+
+.btn{
+  height:5vmin;
+  text-align: center;
+  line-height: 5vmin;
+}
